@@ -1,0 +1,94 @@
+Ansible Docker Local Lab Setup Using PEM Key
+
+1 Install Ansible and Docker on Your Host Machine
+
+Update system
+sudo apt update
+
+Install Docker
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+
+Install Ansible
+sudo apt install -y ansible
+
+Verify installations
+docker --version
+ansible --version
+
+2 Generate PEM Key for SSH Authentication
+
+Create SSH key pair
+ssh-keygen -t rsa -b 4096 -f ansible-key.pem
+
+Set correct permission for private key
+chmod 400 ansible-key.pem
+
+3 Prepare Docker Environment
+
+Pull Ubuntu Image
+docker pull ubuntu:22.04
+
+Create Docker Network
+docker network create ansible-lab
+
+4 Create Ubuntu Servers as Docker Containers
+
+Run Ubuntu Server 1
+docker run -dit --name ubuntu-server-1 --hostname server1 --network ansible-lab ubuntu:22.04
+
+Run Ubuntu Server 2
+docker run -dit --name ubuntu-server-2 --hostname server2 --network ansible-lab ubuntu:22.04
+
+5 Configure SSH Inside Containers
+
+Access Container
+docker exec -it ubuntu-server-1 bash
+
+Install SSH and Required Packages
+apt update
+apt install -y openssh-server sudo
+mkdir /var/run/sshd
+
+6 Create SSH User
+
+Create a user named devops
+useradd -m -s /bin/bash devops
+mkdir /home/devops/.ssh
+chmod 700 /home/devops/.ssh
+
+7 Configure PEM Key Authentication
+
+Add Public Key
+Paste the content of ansible-key.pem.pub into /home/devops/.ssh/authorized_keys
+
+Set Correct Permissions
+chmod 600 /home/devops/.ssh/authorized_keys
+chown -R devops:devops /home/devops/.ssh
+
+8 Enable and Start SSH Service
+
+Edit /etc/ssh/sshd_config and ensure
+PubkeyAuthentication yes
+PasswordAuthentication no
+PermitRootLogin no
+
+Start SSH service
+service ssh start
+exit
+
+9 Repeat Configuration for Second Server
+Repeat steps 5 to 8 for ubuntu-server-2
+
+10 Get Container IP Addresses
+docker inspect ubuntu-server-1 | grep IPAddress
+docker inspect ubuntu-server-2 | grep IPAddress
+
+11 SSH Into Containers Using PEM Key
+ssh -i ansible-key.pem devops@server-ip
+
+12 Result
+Two Ubuntu servers running as Docker containers with SSH access using PEM key ready for Ansible automation.
+
+Would you like me to generate the Ansible inventory file (hosts.ini) configured to use this PEM key?
