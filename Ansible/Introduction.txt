@@ -1,0 +1,48 @@
+# Ansible — Quick Reference
+
+Ansible is an open-source, agentless automation tool by Red Hat. It uses simple, human-readable YAML files called playbooks to automate configuration management, application deployment, task automation, and orchestration across many systems.
+
+## What You Can Do
+- Automate configuration and deployments across many servers.
+- Run ad-hoc commands for troubleshooting or on-the-fly fixes.
+- Orchestrate complex workflows (deployments, rolling updates).
+- Integrate with cloud providers, networking devices, and CI/CD pipelines.
+
+## Key Characteristics
+- **Agentless:** No agents required on managed nodes — uses SSH (OpenSSH) for Linux/UNIX and WinRM for Windows.
+- **Declarative Playbooks:** Describe the desired state; Ansible figures out the steps to reach it.
+- **Idempotent Modules:** Most modules are idempotent — safe to run multiple times.
+- **Extensible:** Custom modules, plugins, and roles allow flexible extension.
+
+## Architecture
+- **Control node:** Machine where you run `ansible` or `ansible-playbook` (typically Linux/macOS with Python). Multiple control nodes are allowed.
+- **Managed nodes (hosts):** Servers, network devices, or virtual machines that Ansible manages.
+- **Inventory:** A file or directory that lists your managed hosts and groups (INI or YAML format).
+- **Modules:** Reusable units that perform tasks (package management, file operations, service control).
+- **Playbooks & Tasks:** Playbooks are ordered lists of plays (target hosts + tasks). Tasks call modules.
+- **Connection plugins:** Control how Ansible connects (SSH, WinRM, local).
+
+## Common Module Categories
+- System modules (user, group, package, service)
+- File modules (copy, template, file)
+- Command modules (command, shell)
+- Networking modules (nxos, ios, eos, junos)
+- Cloud modules (aws, azure, gcp)
+- Application modules (docker, kubernetes)
+
+## Quick Commands
+- Run an ad-hoc command:
+```
+ansible all -m ping -i inventory
+```
+- Run a playbook:
+```
+ansible-playbook -i inventory site.yml
+```
+- Check host connectivity:
+```
+ansible all -m ping -i inventory
+```
+
+
+
