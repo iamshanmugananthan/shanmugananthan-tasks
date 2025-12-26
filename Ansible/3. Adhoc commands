@@ -1,0 +1,85 @@
+An Ansible ad‑hoc command is a one‑line command used to perform quick tasks on one or more remote servers without writing a playbook.
+
+It is mainly used for:
+Quick checks
+Small changes
+Troubleshooting
+Immediate actions
+
+Why do we use Ad‑hoc Commands?
+Ad‑hoc commands are used when:
+You don’t want to create a YAML playbook
+The task is temporary or one‑time
+You need fast execution
+You want to test connectivity or configuration
+
+1. ansible -m ping all
+- m = modules
+- there are several modules there and all denotes all server
+
+2. ansible -m ping node
+- node means its a group under th group we add hosts
+
+3. ansible -m command -a "df -h" all
+- a is used to pass the command
+- command is a command module
+- df is a command to check the disk space
+
+4. ansible -m shell -a "df -h | ls" all
+- shell is a command module but we can use pipelines
+
+5. ansible node -m apt -a "name=apache2 state=present update_cache=yes" -b
+- apt is a module to install apache2
+- name is the name of the package
+- state is the state of the package 
+- update_cache is used to update the cache
+- b is used to run the command in background
+
+6. ansible -m service -a "name=apache2 state=restarted" all
+- service is a module to restart apache2
+
+7. ansible -m copy -a "src=config dest=/tmp" all
+- copy is a module to copy the file from one place to another
+- src is the source file
+- dest is the destination file 
+
+8. ansible -m file -a "dest=/tmp/ak mode=644 state=directory" all
+- file is a module to create a directory
+- dest is the destination directory
+- mode is the mode of the directory
+- state is the state of the directory
+
+9. ansible -m template -a "src=template dest=/tmp/ak" all
+- template is a module to create a template
+- src is the source file
+- dest is the destination file
+
+10.ansible --list-host all
+- it show all host in host files
+
+11. ansible -m user -a "name=devops state=present groups=sudo append=yes" all
+- user is a module to create a user
+- name is the name of the user
+- state is the state of the user
+- groups=sudo adds user to sudo group
+- append=yes ensures existing groups are not removed
+
+12. ansible -m apt -a "name='vim,git,curl' state=present update_cache=yes" -b all
+- Install multiple packages at once
+- b ensures root privileges
+
+13. ansible -m file -a "path=/tmp/oldfile state=absent" all
+- state=absent deletes the file or directory
+- path is the path of the file
+
+14. ansible -m fetch -a "src=/etc/hosts dest=~/hosts_backup/ flat=yes" all
+- fetch copies files from remote hosts to local machine
+- flat=yes prevents creating directory structure
+
+15. ansible -m synchronize -a "src=/local/dir dest=/remote/dir" all
+- synchronize sync directories from local machine to remote machine
+- src is the source directory
+- dest is the destination directory
+- it uses rsync
+
+16.
